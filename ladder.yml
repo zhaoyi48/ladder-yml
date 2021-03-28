@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  kcp:
+    image: xtaci/kcptun:latest
+    container_name: kcp
+    environment:
+      - KEY=[KEY]
+      - CRYPT=aes-128
+      - SERVER="0.0.0.0:8081"
+      - PORT=":8080"
+      - SOCKBUF=64000
+      - DSCP=46
+      - SNDWD=256
+      - RCVWND=1024
+      - DATASHARD=30
+      - PARITYSHARD=10
+    command: server --key $KEY --crypt $CRYPT -t $SERVER -l $PORT -mode fast3 -nocomp -sockbuf $SOCKBUF -dscp $DSCP --sndwnd=$SNDWD --rcvwnd=$RCVWND --datashard=$DATASHARD --parityshard=$PARITYSHARD
+    ports:
+      - 8080:8080/udp
+    restart: always
+  kcp-ss:
+    image: shadowsocks/shadowsocks-libev:latest
+    container_name: kcp-ss
+    environment:
+      - PASSWORD=[PASSWORD]
+    ports:
+      - 8081:8388
+      - 8081:8388/udp
+    restart: always
+  normal-ss:
+    image: shadowsocks/shadowsocks-libev:latest
+    container_name: normal-ss
+    environment:
+      - PASSWORD=[PASSWORD]
+    ports:
+      - 8082:8388
+      - 8082:8388/udp
+    restart: always
