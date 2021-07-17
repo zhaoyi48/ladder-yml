@@ -6,7 +6,7 @@ services:
     environment:
       - KEY=[KEY]
       - CRYPT=aes-128
-      - SERVER="0.0.0.0:8081"
+      - SERVER="kcpss:8081"
       - PORT=":8080"
       - SOCKBUF=64000
       - DSCP=46
@@ -18,14 +18,13 @@ services:
     ports:
       - 8080:8080/udp
     restart: always
+    links:
+      - "kcp-ss:kcpss"
   kcp-ss:
     image: shadowsocks/shadowsocks-libev:latest
     container_name: kcp-ss
     environment:
       - PASSWORD=[PASSWORD]
-    ports:
-      - 8081:8388
-      - 8081:8388/udp
     restart: always
   normal-ss:
     image: shadowsocks/shadowsocks-libev:latest
