@@ -21,17 +21,17 @@ services:
     links:
       - "kcp-ss:kcpss"
   kcp-ss:
-    image: shadowsocks/shadowsocks-libev:latest
+    image: ghcr.io/shadowsocks/ssserver-rust:latest
     container_name: kcp-ss
-    environment:
-      - PASSWORD=[PASSWORD]
     restart: always
+    volumes:
+        - "/root/config.json:/etc/shadowsocks-rust/config.json:ro"
   normal-ss:
-    image: shadowsocks/shadowsocks-libev:latest
+    image: ghcr.io/shadowsocks/ssserver-rust:latest
     container_name: normal-ss
-    environment:
-      - PASSWORD=[PASSWORD]
     ports:
       - 8082:8388
       - 8082:8388/udp
     restart: always
+    volumes:
+        - "/root/config.json:/etc/shadowsocks-rust/config.json:ro"
